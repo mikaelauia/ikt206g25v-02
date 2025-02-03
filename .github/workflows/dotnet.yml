@@ -39,4 +39,4 @@ jobs:
 
     # Step 7: Run Tests
     - name: Run tests
-      run: dotnet test TestLib.Tests/TestLib.Tests.csproj --no-build --verbosity normal
+      run: dotnet test Testlib.Tests/Testlib.Tests.csproj --no-build --verbosity normal
