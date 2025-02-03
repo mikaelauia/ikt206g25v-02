@@ -21,17 +21,24 @@ jobs:
       with:
         dotnet-version: 9.0.x
 
-    # Step 3: Restore dependencies for Testlib
-    - name: Restore dependencies (Library)
-      run: dotnet restore Testlib/Testlib.csproj
+       # Step 3: Restore dependencies
+    - name: Restore dependencies
+      run: |
+        dotnet restore Testlib/Testlib.csproj
+        dotnet restore Testlib.Tests/Testlib.Tests.csproj
+        dotnet restore Showcase/Showcase.csproj
 
-    # Step 4: Restore dependencies for Testlib.Tests
-    - name: Restore dependencies (Tests)
-      run: dotnet restore Testlib.Tests/Testlib.Tests.csproj
+    # Step 4: Build all projects
+    - name: Build projects
+      run: |
+        dotnet build Testlib/Testlib.csproj --no-restore
+        dotnet build Testlib.Tests/Testlib.Tests.csproj --no-restore
+        dotnet build Showcase/Showcase.csproj --no-restore
 
-    # Step 5: Build Testlib
-    - name: Build Testlib
-      run: dotnet build Testlib/Testlib.csproj --no-restore
+    # Step 5: Run Showcase project
+    - name: Run Showcase
+      run: dotnet run --project Showcase/Showcase.csproj
+
 
     # Step 6: Build Testlib.Tests
     - name: Build Testlib.Tests
