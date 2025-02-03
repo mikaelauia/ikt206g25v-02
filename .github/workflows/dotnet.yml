@@ -21,21 +21,21 @@ jobs:
       with:
         dotnet-version: 9.0.x
 
-    # Step 3: Restore dependencies for TestLib
+    # Step 3: Restore dependencies for Testlib
     - name: Restore dependencies (Library)
-      run: dotnet restore TestLib/TestLib.csproj
+      run: dotnet restore Testlib/Testlib.csproj
 
-    # Step 4: Restore dependencies for TestLib.Tests
+    # Step 4: Restore dependencies for Testlib.Tests
     - name: Restore dependencies (Tests)
-      run: dotnet restore TestLib.Tests/TestLib.Tests.csproj
+      run: dotnet restore Testlib.Tests/Testlib.Tests.csproj
 
-    # Step 5: Build TestLib
-    - name: Build TestLib
-      run: dotnet build TestLib/TestLib.csproj --no-restore
+    # Step 5: Build Testlib
+    - name: Build Testlib
+      run: dotnet build Testlib/Testlib.csproj --no-restore
 
-    # Step 6: Build TestLib.Tests
-    - name: Build TestLib.Tests
-      run: dotnet build TestLib.Tests/TestLib.Tests.csproj --no-restore
+    # Step 6: Build Testlib.Tests
+    - name: Build Testlib.Tests
+      run: dotnet build Testlib.Tests/Testlib.Tests.csproj --no-restore
 
     # Step 7: Run Tests
     - name: Run tests
