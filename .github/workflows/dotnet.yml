@@ -2,35 +2,41 @@ name: .NET Build and Test
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the code
+    # Step 1: Checkout the repository
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    # Step 2: Set up .NET SDK
+    # Step 2: Setup .NET SDK
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.x'
+        dotnet-version: 9.0.x
 
-    # Step 3: Restore dependencies
-    - name: Restore dependencies
-      run: dotnet restore
+    # Step 3: Restore dependencies for TestLib
+    - name: Restore dependencies (Library)
+      run: dotnet restore TestLib/TestLib.csproj
 
-    # Step 4: Build the project
-    - name: Build
-      run: dotnet build --no-restore
+    # Step 4: Restore dependencies for TestLib.Tests
+    - name: Restore dependencies (Tests)
+      run: dotnet restore TestLib.Tests/TestLib.Tests.csproj
 
-    # Step 5: Run tests
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    # Step 5: Build TestLib
+    - name: Build TestLib
+      run: dotnet build TestLib/TestLib.csproj --no-restore
+
+    # Step 6: Build TestLib.Tests
+    - name: Build TestLib.Tests
+      run: dotnet build TestLib.Tests/TestLib.Tests.csproj --no-restore
+
+    # Step 7: Run Tests
+    - name: Run tests
+      run: dotnet test TestLib.Tests/TestLib.Tests.csproj --no-build --verbosity normal
