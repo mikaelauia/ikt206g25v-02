@@ -2,48 +2,37 @@ name: .NET Build and Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ] # Trigger on push to main branch
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ] # Trigger on new or updated pull requests targeting main branch
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-latest # Use the latest Ubuntu environment
 
     steps:
     # Step 1: Checkout the repository
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Step 2: Setup .NET SDK
+    # Step 2: Setup .NET SDK (version 9.0.x)
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
 
-       # Step 3: Restore dependencies
+    # Step 3: Restore dependencies for Testlib and Testlib.Tests
     - name: Restore dependencies
       run: |
         dotnet restore Testlib/Testlib.csproj
         dotnet restore Testlib.Tests/Testlib.Tests.csproj
-        dotnet restore Showcase/Showcase.csproj
 
-    # Step 4: Build all projects
+    # Step 4: Build Testlib and Testlib.Tests
     - name: Build projects
       run: |
         dotnet build Testlib/Testlib.csproj --no-restore
         dotnet build Testlib.Tests/Testlib.Tests.csproj --no-restore
-        dotnet build Showcase/Showcase.csproj --no-restore
 
-    # Step 5: Run Showcase project
-    - name: Run Showcase
-      run: dotnet run --project Showcase/Showcase.csproj
-
-
-    # Step 6: Build Testlib.Tests
-    - name: Build Testlib.Tests
-      run: dotnet build Testlib.Tests/Testlib.Tests.csproj --no-restore
-
-    # Step 7: Run Tests
+    # Step 5: Run unit tests
     - name: Run tests
       run: dotnet test Testlib.Tests/Testlib.Tests.csproj --no-build --verbosity normal
